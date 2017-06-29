@@ -5,10 +5,10 @@
 #include "timer.h"
 #include "rpm.h"
 
-const uint8_t RPM_BAR_Y = 0;
-const uint8_t RPM_LABEL_Y = 2;
-const uint8_t RPM_UNIT_X = 84;
-const uint8_t RPM_UNIT_X_SIZE = 18;
+static const uint8_t RPM_BAR_Y = 0;
+static const uint8_t RPM_LABEL_Y = 2;
+static const uint8_t RPM_UNIT_X = 84;
+static const uint8_t RPM_UNIT_X_SIZE = 18;
 
 static const uint8_t RPM_DATA_UNIT[] = { 0xa, 0x4, 0xa, 0x80, 0x42, 0x2f, 0x0,
 		0xc6, 0x29, 0xe6, 0x20, 0xe6, 0x9, 0xa6, 0x0, 0xc6, 0x29, 0xe6 };

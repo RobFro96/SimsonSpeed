@@ -5,17 +5,17 @@
 #include "timer.h"
 #include "speed.h"
 
-const uint16_t CIRCUM = 1800;
+const uint16_t CIRCUM = 180;	// Radumfang in cm
 
-const uint8_t SPEED_VERT_X = 47;
-const uint8_t SPEED_KMH_X = 47;
-const uint8_t SPEED_KMH_SIZE = 19;
-const uint8_t SPEED_KMH_Y = 7;
-const uint8_t SPEED_VALUE_Y = 4;
-const uint8_t SPEED_VALUE_X_1 = 2;
-const uint8_t SPEED_VALUE_X_2 = 24;
+static const uint8_t SPEED_VERT_X = 47;
+static const uint8_t SPEED_KMH_X = 47;
+static const uint8_t SPEED_KMH_SIZE = 19;
+static const uint8_t SPEED_KMH_Y = 7;
+static const uint8_t SPEED_VALUE_Y = 4;
+static const uint8_t SPEED_VALUE_X_1 = 2;
+static const uint8_t SPEED_VALUE_X_2 = 24;
 
-const uint8_t SPEED_DATA_KMH[] = { 0x7d, 0x21, 0x51, 0x1, 0x61, 0x11, 0x71, 0x11,
+static const uint8_t SPEED_DATA_KMH[] = { 0x7d, 0x21, 0x51, 0x1, 0x61, 0x11, 0x71, 0x11,
 		0x71, 0x1, 0x61, 0x11, 0xd, 0x1, 0x7d, 0x11, 0x61, 0x1, 0xff };
 
 void speed_draw_label() {
@@ -41,7 +41,7 @@ void speed_draw_speed() {
 	uint8_t speed = 0;
 
 	if (speed_periode != 0xffff) {
-		speed = (uint8_t)(CIRCUM * 3.6f / (speed_periode * 64e-3));
+		speed = (uint8_t)(CIRCUM * 3.6f / (speed_periode * 64e-4));
 	}
 
 	uint8_t first_digit = speed / 10;

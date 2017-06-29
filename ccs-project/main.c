@@ -5,6 +5,7 @@
 #include "timer.h"
 #include "digit.h"
 #include "speed.h"
+#include "trip.h"
 
 int main(void) {
 	WDTCTL = WDTPW | WDTHOLD;		// Stop watchdog timer
@@ -17,6 +18,7 @@ int main(void) {
 
 	rpm_draw_label();
 	speed_draw_label();
+	trip_draw_label();
 
 	__enable_interrupt();
 
@@ -25,6 +27,7 @@ int main(void) {
 	while (1) {
 		rpm_draw_bar();
 		speed_draw_speed();
+		trip_draw_trip();
 		P1DIR ^= BIT0;
 	}
 }
