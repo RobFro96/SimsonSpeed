@@ -5,7 +5,7 @@
 #include "timer.h"
 #include "speed.h"
 
-const uint16_t CIRCUM = 180;	// Radumfang in cm
+const uint16_t CIRCUM = 167;	// Radumfang in cm
 
 static const uint8_t SPEED_VERT_X = 47;
 static const uint8_t SPEED_KMH_X = 47;

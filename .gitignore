@@ -3,6 +3,8 @@ ccs-project/Debug/
 ccs-project/.launches/
 ccs-project/targetConfigs/
 ccs-project/.settings
+Thumbs.db
+desktop.ini
 # Prerequisites
 *.d
 

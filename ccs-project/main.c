@@ -19,6 +19,7 @@ int main(void) {
 	rpm_draw_label();
 	speed_draw_label();
 	trip_draw_label();
+	gear_draw_label();
 
 	__enable_interrupt();
 

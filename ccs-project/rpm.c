@@ -15,8 +15,9 @@ static const uint8_t RPM_DATA_UNIT[] = { 0xa, 0x4, 0xa, 0x80, 0x42, 0x2f, 0x0,
 
 void rpm_draw_bar() {
 	uint8_t rpm_pxls = 0;
+	uint16_t rpm_periode = timer_get_rpm_periode();
 	if (rpm_periode != 0xffff) {
-		rpm_pxls = (uint8_t)(100000.0f / rpm_periode);
+		rpm_pxls = (uint8_t)(200000.0f / rpm_periode);
 	}
 
 	// Draw Bar Graph

@@ -5,7 +5,7 @@
 
 const uint16_t DEBOUNCE_LENGTH = 4 * 64;	// LENGTH * 64us = Zeit
 
-uint16_t rpm_periode = 0xffff;
+static uint16_t rpm_periodes[] = {0xffff, 0xffff};
 uint16_t speed_periode = 0xffff;
 static uint16_t last_ccr0 = 0;
 static uint16_t last_ccr1 = 0;
@@ -37,11 +37,20 @@ void timer_init() {
 	TA1CTL |= MC_2;
 }
 
+uint16_t timer_get_rpm_periode() {
+	if (rpm_periodes[0] < rpm_periodes[1] * 0.75f) {
+		return rpm_periodes[1];
+	} else {
+		return rpm_periodes[0];
+	}
+}
+
 #pragma vector=TIMER1_A0_VECTOR
 interrupt void TIMER1_A0_ISR() {
 	// Store RPM Capture
 	uint16_t ccr0 = TA1CCR0;
-	rpm_periode = ccr0 - last_ccr0;
+	rpm_periodes[1] = rpm_periodes[0];
+	rpm_periodes[0] = ccr0 - last_ccr0;
 	last_ccr0 = ccr0;
 	overflowed_rpm = 0;
 }
@@ -93,7 +102,8 @@ static void isr_TA1_ccr2() {
 static void isr_TA1_overflow() {
 	// If rpm-overflowed, clear rpm_periode
 	if (overflowed_rpm) {
-		rpm_periode = 0xffff;
+		rpm_periodes[0] = 0xffff;
+		rpm_periodes[1] = 0xffff;
 	}
 
 	// set rpm overflow flag
