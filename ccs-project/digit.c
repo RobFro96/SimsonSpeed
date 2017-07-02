@@ -122,3 +122,12 @@ void digit_clear_7x5(uint8_t x, uint8_t y_page) {
 		lcd_set_pixels(x + i, y_page, 0);
 	}
 }
+
+void digit_draw_7x5_number(uint8_t x, uint8_t y_page, uint8_t digit_count, uint16_t value) {
+	x = x + digit_count * 6 - 6;
+	for (uint8_t i = 0; i< digit_count; i++) {
+		digit_draw_7x5(x, y_page, value % 10);
+		value = value / 10;
+		x -= 6;
+	}
+}

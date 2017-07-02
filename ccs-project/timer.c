@@ -3,7 +3,7 @@
 #include "timer.h"
 #include "trip.h"
 
-const uint16_t DEBOUNCE_LENGTH = 4 * 64;	// LENGTH * 64us = Zeit
+const uint16_t DEBOUNCE_LENGTH = 256;	// LENGTH * 1us = Time
 
 static uint16_t rpm_periodes[] = {0xffff, 0xffff};
 uint16_t speed_periode = 0xffff;
@@ -28,7 +28,6 @@ void timer_init() {
 	TA1CCR2 = 0;
 
 	// RPM & Speed Pin Setup
-	P2REN |= BIT0 + BIT1;
 	P2DIR &= ~(BIT0 + BIT1);
 	P2SEL |= BIT0 + BIT1;
 	P2SEL2 &= ~(BIT0 + BIT1);
