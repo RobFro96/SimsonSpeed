@@ -45,6 +45,10 @@ void lcd_init() {
 
 }
 
+void lcd_disable() {
+	lcd_reset_l();
+}
+
 void lcd_spi_send_byte(uint8_t value) {
 	while (!(IFG2 & UCA0TXIFG))
 		;

@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include "timer.h"
 #include "trip.h"
+#include "power.h"
 
 const uint16_t DEBOUNCE_LENGTH = 256;	// LENGTH * 1us = Time
 
@@ -28,12 +29,18 @@ void timer_init() {
 	TA1CCR2 = 0;
 
 	// RPM & Speed Pin Setup
+	P2REN |= BIT1;
 	P2DIR &= ~(BIT0 + BIT1);
 	P2SEL |= BIT0 + BIT1;
 	P2SEL2 &= ~(BIT0 + BIT1);
 
 	// Start Timer
 	TA1CTL |= MC_2;
+}
+
+void timer_disable() {
+	TA1CTL &=~ MC_2;
+	P2REN &= ~BIT1;
 }
 
 uint16_t timer_get_rpm_periode() {
@@ -52,6 +59,8 @@ interrupt void TIMER1_A0_ISR() {
 	rpm_periodes[0] = ccr0 - last_ccr0;
 	last_ccr0 = ccr0;
 	overflowed_rpm = 0;
+
+	power_feed_timer();
 }
 
 #pragma vector=TIMER1_A1_VECTOR
@@ -84,7 +93,6 @@ static void isr_TA1_ccr2() {
 		return;
 
 	trip_on_rotation();
-
 	// Calculate extended CCR1 Speed Capture
 	uint16_t ccr1 = (overflow << 10) + (TA1CCR1 >> 6);
 
@@ -96,6 +104,8 @@ static void isr_TA1_ccr2() {
 	// Set last_crr1 with current
 	last_ccr1 = ccr1;
 	overflowed_speed = 0;
+
+	power_feed_timer();
 }
 
 static void isr_TA1_overflow() {
@@ -123,4 +133,6 @@ static void isr_TA1_overflow() {
 		// set speed overflow flag
 		overflowed_speed = 1;
 	}
+
+	power_tick_timer();
 }
