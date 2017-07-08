@@ -8,8 +8,9 @@
 #include "trip.h"
 #include "gear.h"
 #include "power.h"
+#include "touch.h"
 
-static const uint16_t STANDBY_INTERVAL = 10 * 15; // time = INTERVAL / (15.26 Hz)
+static const uint16_t STANDBY_INTERVAL = 30 * 15; // time = INTERVAL / (15.26 Hz)
 
 static uint16_t timer_value = 0;
 static uint8_t sleeping = 0;
@@ -19,6 +20,7 @@ void power_init() {
 
 	lcd_init();
 	timer_init();
+	touch_init();
 
 	rpm_draw_label();
 	speed_draw_label();
@@ -36,6 +38,7 @@ static void power_fall_asleep() {
 
 	lcd_disable();
 	timer_disable();
+	touch_disable();
 }
 
 void power_tick_timer() {
