@@ -10,7 +10,7 @@ int main(void) {
 	BCSCTL1 |= DIVA_3;
 
 	P1REN = BIT1 + BIT6 + BIT7;
-	P2REN = BIT2 + BIT5;
+	P2REN = BIT4 + BIT5;
 
 	// ACLK-Test
 	//P1DIR |= BIT0;

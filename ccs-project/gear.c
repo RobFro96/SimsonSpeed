@@ -23,8 +23,8 @@ static const uint8_t GEAR_LABEL_X = 49;
 static const uint8_t GEAR_LABEL_SIZE = 26;
 static const uint8_t GEAR_LABEL_Y = 4;
 
-static const uint8_t GEAR_VALUE_HIGH[] = { 105, 53, 37 };
-static const uint8_t GEAR_VALUE_LOW[] = { 95, 47, 32 };
+static const uint8_t GEAR_VALUE_HIGH[] = { 110, 55, 40 };
+static const uint8_t GEAR_VALUE_LOW[] = { 90, 45, 30 };
 static const uint8_t GEAR_COUNT = 3;
 
 static const uint8_t GEAR_GEAR_X = 79;

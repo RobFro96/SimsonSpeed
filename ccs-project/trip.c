@@ -88,12 +88,12 @@ void trip_draw_trip() {
 	digit_draw_7x5(TRIP_BRACE_X + 3, TRIP_BRACE_Y, current_distance + 1);
 }
 
-void trip_on_touch(uint8_t button, uint16_t time) {
-	if (button == 1 && time > 1000) {
+void trip_on_touch(uint16_t time) {
+	if (time > 2000) {
 		// left button pressed for 2 secs
 		distance[current_distance] = 0;
 		power_feed_timer();
-	} else if (button == 0 && time > 200) {
+	} else if (time > 200) {
 		// right button pressed for short time
 		current_distance ^= BIT0;
 		power_feed_timer();

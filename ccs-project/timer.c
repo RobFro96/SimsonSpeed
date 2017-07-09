@@ -6,7 +6,7 @@
 
 const uint16_t DEBOUNCE_LENGTH = 256;	// LENGTH * 1us = Time
 
-static uint16_t rpm_periodes[] = {0xffff, 0xffff};
+static uint16_t rpm_periodes[] = { 0xffff, 0xffff };
 uint16_t speed_periode = 0xffff;
 static uint16_t last_ccr0 = 0;
 static uint16_t last_ccr1 = 0;
@@ -29,7 +29,8 @@ void timer_init() {
 	TA1CCR2 = 0;
 
 	// RPM & Speed Pin Setup
-	P2REN |= BIT1;
+	P2DIR |= BIT2;
+	P2OUT |= BIT2;
 	P2DIR &= ~(BIT0 + BIT1);
 	P2SEL |= BIT0 + BIT1;
 	P2SEL2 &= ~(BIT0 + BIT1);
@@ -39,8 +40,10 @@ void timer_init() {
 }
 
 void timer_disable() {
-	TA1CTL &=~ MC_2;
-	P2REN &= ~BIT1;
+	TA1CTL &= ~ MC_2;
+
+	P2DIR &= ~BIT2;
+	P2OUT &= ~BIT2;
 }
 
 uint16_t timer_get_rpm_periode() {
