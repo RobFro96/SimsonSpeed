@@ -30,6 +30,8 @@ static const uint8_t GEAR_COUNT = 3;
 static const uint8_t GEAR_GEAR_X = 79;
 static const uint8_t GEAR_GEAR_Y = 4;
 
+uint8_t gear_draw_value = 0;
+
 void gear_draw_label() {
 	// Gear Label
 	for (uint8_t x = 0; x < GEAR_LABEL_SIZE; x++) {
@@ -56,7 +58,9 @@ void gear_draw_gear() {
 		}
 	}
 
-	digit_draw_7x5_number(GEAR_LABEL_X, GEAR_LABEL_Y + 1, 3, gear_value);
+	if (gear_draw_value)
+		digit_draw_7x5_number(GEAR_LABEL_X, GEAR_LABEL_Y + 1, 3, gear_value);
+
 
 	const uint8_t *pt = &(GEAR_DATA_DIGITS[10 * 2 * gear]);
 

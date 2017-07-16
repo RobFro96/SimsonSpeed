@@ -5,6 +5,7 @@
 #include "speed.h"
 #include "trip.h"
 #include "power.h"
+#include "gear.h"
 
 static uint16_t distance[] = { 0, 0 }; 	// Distanz in 100 m
 static uint16_t distance_fraction = 0; 	// Teil-Distanz in cm
@@ -89,7 +90,9 @@ void trip_draw_trip() {
 }
 
 void trip_on_touch(uint16_t time) {
-	if (time > 2000) {
+	if (time > 4000) {
+		gear_draw_value ^= BIT0;
+	} else 	if (time > 2000) {
 		// left button pressed for 2 secs
 		distance[current_distance] = 0;
 		power_feed_timer();
