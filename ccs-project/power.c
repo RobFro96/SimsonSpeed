@@ -10,7 +10,7 @@
 #include "power.h"
 #include "touch.h"
 
-static const uint16_t STANDBY_INTERVAL = 5*15;//30 * 15; // time = INTERVAL / (15.26 Hz)
+static const uint16_t STANDBY_INTERVAL = 30 * 15; // time = INTERVAL / (15.26 Hz)
 
 static uint16_t timer_value = 0;
 static uint8_t sleeping = 0;
