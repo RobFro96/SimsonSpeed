@@ -3,6 +3,7 @@
 #include "timer.h"
 #include "trip.h"
 #include "power.h"
+#include "touch.h"
 
 const uint16_t DEBOUNCE_LENGTH = 256;	// LENGTH * 1us = Time
 
@@ -138,4 +139,5 @@ static void isr_TA1_overflow() {
 	}
 
 	power_tick_timer();
+	touch_on_timer();
 }

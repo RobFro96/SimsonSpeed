@@ -10,6 +10,6 @@
 
 void touch_init();
 void touch_disable();
-void touch_draw_test();
+void touch_on_timer();
 
 #endif /* TOUCH_H_ */

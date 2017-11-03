@@ -7,14 +7,10 @@ int main(void) {
 
 	DCOCTL = CALDCO_1MHZ;
 	BCSCTL1 = CALBC1_1MHZ;
-	BCSCTL1 |= DIVA_3;
 
-	P1REN = BIT1 + BIT6 + BIT7;
-	P2REN = BIT0 + BIT4 + BIT5;
-
-	// ACLK-Test
-	//P1DIR |= BIT0;
-	//P1SEL |= BIT0;
+	P2SEL &= ~(BIT6+BIT7);
+	P1REN = BIT0 + BIT1 + BIT6 + BIT7;
+	P2REN = BIT0 + BIT3 + BIT4 + BIT5 + BIT6 + BIT7;
 
 	__enable_interrupt();
 

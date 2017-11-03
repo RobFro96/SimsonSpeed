@@ -10,7 +10,7 @@
 #include "power.h"
 #include "touch.h"
 
-static const uint16_t STANDBY_INTERVAL = 30 * 15; // time = INTERVAL / (15.26 Hz)
+static const uint16_t STANDBY_INTERVAL = 5*15;//30 * 15; // time = INTERVAL / (15.26 Hz)
 
 static uint16_t timer_value = 0;
 static uint8_t sleeping = 0;
@@ -73,6 +73,13 @@ void power_main_loop() {
 interrupt void PORT2_ISR() {
 	if (P2IFG & BIT0) {
 		P2IFG &= ~BIT0;
+		if (sleeping) {
+			__low_power_mode_off_on_exit();
+		}
+	}
+
+	if (P2IFG & BIT3) {
+		P2IFG &= ~BIT3;
 		if (sleeping) {
 			__low_power_mode_off_on_exit();
 		}

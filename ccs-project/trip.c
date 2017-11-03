@@ -90,14 +90,14 @@ void trip_draw_trip() {
 }
 
 void trip_on_touch(uint16_t time) {
-	if (time > 4000) {
+	if (time > 15*4) {
 		gear_draw_value ^= BIT0;
-	} else 	if (time > 2000) {
-		// left button pressed for 2 secs
+	} else 	if (time > 15*2) {
+		// button pressed for 2 secs
 		distance[current_distance] = 0;
 		power_feed_timer();
-	} else if (time > 200) {
-		// right button pressed for short time
+	} else {
+		// button pressed for short time
 		current_distance ^= BIT0;
 		power_feed_timer();
 	}
