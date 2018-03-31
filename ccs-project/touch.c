@@ -10,6 +10,7 @@ static uint16_t pressed_ticks = 0;
 void touch_init() {
 	P2DIR &= ~(BIT3);
 	P2REN |= BIT3;
+	P2OUT |= BIT3;
 	P2IE &= ~(BIT3);
 }
 
