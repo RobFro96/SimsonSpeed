@@ -1,0 +1,8 @@
+C:\Users\rob\Documents\Git\SimsonSpeed\tester\gui\SimsonSpeedTester\SimsonSpeedTester\bin\Debug\SimsonSpeedTester.exe.config
+C:\Users\rob\Documents\Git\SimsonSpeed\tester\gui\SimsonSpeedTester\SimsonSpeedTester\obj\Debug\SimsonSpeedTester.csprojResolveAssemblyReference.cache
+C:\Users\rob\Documents\Git\SimsonSpeed\tester\gui\SimsonSpeedTester\SimsonSpeedTester\obj\Debug\SimsonSpeedTester.Properties.Resources.resources
+C:\Users\rob\Documents\Git\SimsonSpeed\tester\gui\SimsonSpeedTester\SimsonSpeedTester\obj\Debug\SimsonSpeedTester.csproj.GenerateResource.Cache
+C:\Users\rob\Documents\Git\SimsonSpeed\tester\gui\SimsonSpeedTester\SimsonSpeedTester\bin\Debug\SimsonSpeedTester.exe
+C:\Users\rob\Documents\Git\SimsonSpeed\tester\gui\SimsonSpeedTester\SimsonSpeedTester\bin\Debug\SimsonSpeedTester.pdb
+C:\Users\rob\Documents\Git\SimsonSpeed\tester\gui\SimsonSpeedTester\SimsonSpeedTester\obj\Debug\SimsonSpeedTester.exe
+C:\Users\rob\Documents\Git\SimsonSpeed\tester\gui\SimsonSpeedTester\SimsonSpeedTester\obj\Debug\SimsonSpeedTester.pdb
