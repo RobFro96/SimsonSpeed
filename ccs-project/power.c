@@ -26,6 +26,8 @@ void power_init() {
 	speed_draw_label();
 	trip_draw_label();
 	gear_draw_label();
+
+	font_draw_string(0, 2, "Hallo Welt!");
 }
 
 static void power_fall_asleep() {

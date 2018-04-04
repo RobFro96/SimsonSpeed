@@ -1,13 +1,15 @@
 from PIL import Image
 import sys
 
-im = Image.open(sys.argv[1]) #Can be many different formats.
+im = Image.open("font8x6.png") #Can be many different formats.
 pix = im.load()
 xSize = im.size[0]
 ySize = im.size[1] / 8
 
 ret = "{"
 for x in range(xSize):
+    if x % 6 == 5:
+        continue
     for yPage in range(ySize):
         value = 0
         for y in range(8):
