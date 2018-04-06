@@ -16,5 +16,3 @@ Bilddateien, Skripte zum Umwandeln der Bilddateien in Byte-Arrays zum Einfügen 
 
 ## tester/
 Platine mit Arduino Nano zum Simulieren der Lichtmaschine und Reed-Kontakt. Ermöglicht einfaches Testen der Anwendungen.
-
-<a href="https://creativecommons.org/licenses/by-sa/4.0/legalcode" style="margin-left:20px;"><img src="images/cc-by-sa.png"></a>
