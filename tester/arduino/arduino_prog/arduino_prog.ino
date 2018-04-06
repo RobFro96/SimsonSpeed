@@ -1,4 +1,4 @@
-uint16_t speed_delay = 71;
+uint16_t speed_delay = 163;
 String msg = "";
 
 void setup() {
@@ -10,7 +10,7 @@ void setup() {
   TCCR1A = 0;
   TCCR1B = 0;
 
-  OCR1A = 10000;
+  OCR1A = 5000;
   TCCR1A = (1<<COM1A0);
   TCCR1B = (1<<CS11) | (1<<WGM12);
 }
