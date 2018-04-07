@@ -3,6 +3,10 @@
 
 #include "digit.h"
 
+#if 1
+// Präprozessor-Anweisung für Folding
+
+// Ziffern 6x8 für Legende der RPM-Anzeige (siehe gfx/big8x6num.png)
 static const uint8_t DIGIT_DATA_6x8[] = { 0x7e, 0xff, 0x81, 0x81, 0xff, 0x7e,
 		0x84, 0x82, 0xff, 0xff, 0x80, 0x80, 0x82, 0xc1, 0xe1, 0xb1, 0x9f, 0x8e,
 		0x42, 0x89, 0x89, 0x89, 0xff, 0x76, 0x30, 0x2c, 0x23, 0xff, 0xff, 0x20,
@@ -10,6 +14,7 @@ static const uint8_t DIGIT_DATA_6x8[] = { 0x7e, 0xff, 0x81, 0x81, 0xff, 0x7e,
 		0x1, 0xc1, 0xf1, 0x3d, 0xf, 0x3, 0x76, 0xff, 0x89, 0x89, 0xff, 0x76,
 		0x8e, 0x9f, 0x91, 0xd1, 0x7f, 0x3e };
 
+// Ziffern 20x32 für die Anzeige der Geschwindigkeit (siehe gfx/speedfont.png)
 static const uint8_t DIGIT_DATA_20x32[] = { 0x0, 0xfe, 0xff, 0x0, 0xc0, 0xff,
 		0xff, 0x3, 0xe0, 0xff, 0xff, 0xf, 0xf0, 0xff, 0xff, 0x1f, 0xf8, 0xff,
 		0xff, 0x3f, 0xf8, 0xff, 0xff, 0x3f, 0xfc, 0xff, 0xff, 0x7f, 0xfc, 0x0,
@@ -77,12 +82,22 @@ static const uint8_t DIGIT_DATA_20x32[] = { 0x0, 0xfe, 0xff, 0x0, 0xc0, 0xff,
 		0xc0, 0xff, 0xff, 0x1, 0x80, 0xff, 0x7f, 0x0, 0x0, 0xfc, 0xf, 0x0, 0x0,
 		0x0, 0x0, 0x0 };
 
+// Ziffern 7x5 für Kilometerstand (siehe gfx/font7x5.png)
 static const uint8_t DIGIT_DATA_7x5[] = { 0x3e, 0x41, 0x49, 0x41, 0x3e, 0x0,
 		0x42, 0x7f, 0x40, 0x0, 0x42, 0x61, 0x51, 0x49, 0x46, 0x21, 0x41, 0x45,
 		0x4b, 0x31, 0x18, 0x14, 0x12, 0x7f, 0x10, 0x27, 0x45, 0x45, 0x45, 0x39,
 		0x3c, 0x4a, 0x49, 0x49, 0x30, 0x1, 0x71, 0x9, 0x5, 0x3, 0x36, 0x49,
 		0x49, 0x49, 0x36, 0x6, 0x49, 0x49, 0x29, 0x1e };
 
+#endif
+
+/**
+ * Zeichnen einer 6x8 Ziffer
+ *
+ * @param x			X-Position
+ * @param y_page	Y-Page
+ * @param digit		Ziffer
+ */
 void digit_draw_6x8(uint8_t x, uint8_t y_page, uint8_t digit) {
 	const uint8_t *pt = &(DIGIT_DATA_6x8[6 * digit]);
 
@@ -92,6 +107,13 @@ void digit_draw_6x8(uint8_t x, uint8_t y_page, uint8_t digit) {
 	}
 }
 
+/**
+ * Zeichnen einer 20x32 Ziffer
+ *
+ * @param x			X-Position
+ * @param y_page	Y-Page
+ * @param digit		Ziffer
+ */
 void digit_draw_20x32(uint8_t x, uint8_t y_page, uint8_t digit) {
 	const uint8_t *pt = &(DIGIT_DATA_20x32[20 * 4 * digit]);
 
@@ -103,6 +125,12 @@ void digit_draw_20x32(uint8_t x, uint8_t y_page, uint8_t digit) {
 	}
 }
 
+/**
+ * Löschen des Bereiches einer 20x32 Ziffer
+ *
+ * @param x			X-Position
+ * @param y_page	Y-Page
+ */
 void digit_clear_20x32(uint8_t x, uint8_t y_page) {
 	for (uint8_t i = 0; i < 20; i++) {
 		for (uint8_t y = 0; y < 4; y++) {
@@ -111,6 +139,13 @@ void digit_clear_20x32(uint8_t x, uint8_t y_page) {
 	}
 }
 
+/**
+ * Zeichnen einer 7x5 Ziffer
+ *
+ * @param x			X-Position
+ * @param y_page	Y-Page
+ * @param digit		Tiffer
+ */
 void digit_draw_7x5(uint8_t x, uint8_t y_page, uint8_t digit) {
 	const uint8_t *pt = &(DIGIT_DATA_7x5[5 * digit]);
 
@@ -120,12 +155,26 @@ void digit_draw_7x5(uint8_t x, uint8_t y_page, uint8_t digit) {
 	}
 }
 
+/**
+ * Löschen des Bereiches einer 7x5 Ziffer
+ *
+ * @param x			X-Position
+ * @param y_page	Y-Page
+ */
 void digit_clear_7x5(uint8_t x, uint8_t y_page) {
 	for (uint8_t i = 0; i < 5; i++) {
 		lcd_set_pixels(x + i, y_page, 0);
 	}
 }
 
+/**
+ * Zeichnen einer Zahl aus mehreren 7x5 Ziffern
+ *
+ * @param x				X-Position
+ * @param y_page		Y-Page
+ * @param digit_count	Anzahl der Stellen
+ * @param value			Wert der Zahl
+ */
 void digit_draw_7x5_number(uint8_t x, uint8_t y_page, uint8_t digit_count,
 		uint16_t value) {
 	x = x + digit_count * 6 - 6;

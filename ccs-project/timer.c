@@ -1,24 +1,31 @@
 #include <msp430.h>
 #include <stdint.h>
-#include "timer.h"
 #include "trip.h"
 #include "power.h"
 #include "touch.h"
 
-const uint16_t DEBOUNCE_LENGTH = 256;	// LENGTH * 1us = Time
+#include "timer.h"
 
-static uint16_t rpm_periodes[] = { 0xffff, 0xffff };
-uint16_t speed_periode = 0xffff;
-static uint16_t last_ccr0 = 0;
-static uint16_t last_ccr1 = 0;
-static uint8_t overflowed_rpm = 1;
-static uint8_t overflowed_speed = 1;
-static uint16_t overflow = 0;
+// Entprellen des Magnetschalters
+const uint16_t DEBOUNCE_LENGTH = 256;	// Time = LENGTH * 1us
 
+// Variablen
+static uint16_t rpm_periodes[] = { 0xffff, 0xffff };// Zwei RPM-Perioden im RAM
+uint16_t speed_periode = 0xffff;	// Periodendauer der Geschwindigkeitsmessung
+static uint16_t last_ccr0 = 0;		// Alter Wert des CCR0-Registers
+static uint16_t last_ccr1 = 0;		// Alter Wert des CCR1-Registers
+static uint8_t overflowed_rpm = 1;	// Gibt an, ob es zum Overflow des CCR0 kam
+static uint8_t overflowed_speed = 1;// Gibt an, ob es zum Overflow des CCR1 kam
+static uint16_t overflow = 0;// Zähler der Timer-Overflows, da Geschwindigkeitsperiode zwangsweise über mehrer Overflows geht
+
+// Prototypen
 static void isr_TA1_ccr1();
 static void isr_TA1_ccr2();
 static void isr_TA1_overflow();
 
+/**
+ * Initialisierung des Timers, Drehzahl- und Geschwindigkeitsmessung
+ */
 void timer_init() {
 	// Timer Setup
 	TA1CTL = TASSEL_2 + TACLR + TAIE;
@@ -40,6 +47,9 @@ void timer_init() {
 	TA1CTL |= MC_2;
 }
 
+/**
+ * Deaktivieren des Timers, nötig für Low-Power
+ */
 void timer_disable() {
 	TA1CTL &= ~ MC_2;
 
@@ -47,6 +57,11 @@ void timer_disable() {
 	P2OUT &= ~BIT2;
 }
 
+/**
+ * Gibt die RPM-Periode zurück
+ *
+ * @return	RPM-Periode
+ */
 uint16_t timer_get_rpm_periode() {
 	if (rpm_periodes[0] < rpm_periodes[1] * 0.75f) {
 		return rpm_periodes[1];
@@ -55,18 +70,26 @@ uint16_t timer_get_rpm_periode() {
 	}
 }
 
+/**
+ * ISR des CCR0
+ */
 #pragma vector=TIMER1_A0_VECTOR
 interrupt void TIMER1_A0_ISR() {
-	// Store RPM Capture
+	// Abspeichern der RPM-Periode
 	uint16_t ccr0 = TA1CCR0;
-	rpm_periodes[1] = rpm_periodes[0];
-	rpm_periodes[0] = ccr0 - last_ccr0;
+	rpm_periodes[1] = rpm_periodes[0];	// Alter Wert in Element 1
+	rpm_periodes[0] = ccr0 - last_ccr0;	// Neuer Wert in Element 0
 	last_ccr0 = ccr0;
 	overflowed_rpm = 0;
 
+	// Verhindern des Stand-By
 	power_feed_timer();
 }
 
+/**
+ * ISR andere Timer
+ * Weiterleiten an folgenden Funktionen
+ */
 #pragma vector=TIMER1_A1_VECTOR
 interrupt void TIMER1_A1_ISR() {
 	switch (TA1IV) {
@@ -82,62 +105,77 @@ interrupt void TIMER1_A1_ISR() {
 	}
 }
 
+/**
+ * ISR des CCR1
+ */
 static void isr_TA1_ccr1() {
-	// Speed Pin Interruptes, Enabled Delay CCR2 Compare for Debouncing
+	// Speed Pin Interupt -> Aktivierung des CCR2 zum Entprellen
 	TA1CCR2 = TA1CCR1 + DEBOUNCE_LENGTH;
 	TA1CCTL2 = CCIE;
 }
 
+/**
+ * ISR CCR2
+ */
 static void isr_TA1_ccr2() {
-	// Delayed Speed Pin Interrupt
-	TA1CCTL2 = 0;	// Disable CCR2 Interrupt
+	// Verzögerter Interrupt des Speed-Pins
 
-	// Check: Interrupt was not Bouncing
+	TA1CCTL2 = 0;	// Deaktivieren CCR2 Interrupt
+
+	// Prüfe, ob vorangegangen CCR1 nicht durch Prellen enstanden ist
 	if (TA1CCTL1 & CCI)
 		return;
 
+	// Randumdrehung an Trip weiterleiten
 	trip_on_rotation();
-	// Calculate extended CCR1 Speed Capture
+
+	// Zusammensetzen des Timers-Wertes aus CCR1-Wert und Timer-Overflow-Wert
 	uint16_t ccr1 = (overflow << 10) + (TA1CCR1 >> 6);
 
-	// Check: last_ccr1 was not overflowed
+	// Prüfe: kein Overflow des Speed-Timers
 	if (last_ccr1 != 0xffff) {
 		speed_periode = ccr1 - last_ccr1;
 	}
 
-	// Set last_crr1 with current
+	// Setzen des letzen Wertes -> ermöglicht nächste Timermessung
 	last_ccr1 = ccr1;
 	overflowed_speed = 0;
 
+	// StandBy verhindern
 	power_feed_timer();
 }
 
+/**
+ * ISR des Timer-Overflow
+ * Ausgeführt mit 15,26 Hz
+ */
 static void isr_TA1_overflow() {
-	// If rpm-overflowed, clear rpm_periode
+	// RPM-Overflow beim zweiten Mal -> Löschen der Werte
 	if (overflowed_rpm) {
 		rpm_periodes[0] = 0xffff;
 		rpm_periodes[1] = 0xffff;
 	}
 
-	// set rpm overflow flag
+	// RPM-Overflow-Flag setzen, erst beim 2. Mal ist Overflow sicher
 	overflowed_rpm = 1;
 
-	// increase overflow-counter
+	// Overflow-Counter erhöhen -> wird benötigt zur Speed-Messung
 	overflow++;
 
-	// If overflow-counter overflowed
+	// Overflow-Counter overflowed (Nibble-Overflow)
 	if ((overflow & 0xf) == 0xf) {
 
-		// Clear speed periode, if overflowed
+		// Löschen der Speed-Periode
 		if (overflowed_speed) {
 			speed_periode = 0xffff;
 			last_ccr1 = 0xffff;
 		}
 
-		// set speed overflow flag
+		// Setzen der Overflow-Flag
 		overflowed_speed = 1;
 	}
 
-	power_tick_timer();
-	touch_on_timer();
+	// Funktionen ausführen, die 15,26 Hz-Timer benötigen
+	power_tick_timer();	// StandBy hochzählen
+	touch_on_timer();	// Touch-Updaten
 }

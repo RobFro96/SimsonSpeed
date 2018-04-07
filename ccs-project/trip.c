@@ -3,14 +3,16 @@
 #include "lcd.h"
 #include "digit.h"
 #include "speed.h"
-#include "trip.h"
 #include "power.h"
 #include "gear.h"
 
-static uint16_t distance[] = { 0, 0 }; 	// Distanz in 100 m
-static uint16_t distance_fraction = 0; 	// Teil-Distanz in cm
-static uint8_t current_distance = 0;
+#include "trip.h"
 
+static uint16_t distance[] = { 0, 0 }; 	// Trips in 100 m
+static uint16_t distance_fraction = 0; 	// Teil-Distanz in cm
+
+// TODO: Neue Anzeige implementieren
+static uint8_t current_distance = 0;
 static const uint8_t TRIP_DATA_LABEL[] = { 0x1, 0x1, 0x7f, 0x1, 0x1, 0x0, 0x7c,
 		0x8, 0x4, 0x4, 0x8, 0x0, 0x0, 0x44, 0x7d, 0x40, 0x0, 0x0, 0xfc, 0x24,
 		0x24, 0x24, 0x18, 0x0, 0x36, 0x36 };
@@ -26,19 +28,25 @@ static const uint8_t TRIP_VALUE_X_4 = 97;
 static const uint8_t TRIP_BRACE_X = 91;
 static const uint8_t TRIP_BRACE_Y = 7;
 
+/**
+ * Hochzählen der Distanzmessung, wenn es zu einer Radumdrehung kommt
+ */
 void trip_on_rotation() {
-	distance_fraction += CIRCUM;
+	distance_fraction += CIRCUM;	// Hinzuaddieren des Radumfangs zur Teil-Distanz
 
-	// After 100 m in distance_fraction carry in distance
+	// Wenn Teildistanz größer als 100m (10.000 cm) werden die beiden Trips hochgezählt
 	while (distance_fraction > 10000) {
-		distance_fraction -= 10000;
+		distance_fraction -= 10000;	// Abziehen der 100 m
 		distance[0]++;
 		distance[1]++;
 	}
 }
 
+/**
+ * Zeichnen des statischen Teil der Anzeige
+ */
 void trip_draw_label() {
-	// Trip Label
+	// TODO: Neue Anzeige implementieren
 	for (uint8_t x = 0; x < TRTP_LABEL_SIZE; x++) {
 		lcd_set_pixels(x + TRIP_LABEL_X, TRIP_Y, TRIP_DATA_LABEL[x]);
 	}
@@ -55,6 +63,9 @@ void trip_draw_label() {
 
 }
 
+/**
+ * Aktualisieren der Anzeige
+ */
 void trip_draw_trip() {
 	uint16_t distance_temp = distance[current_distance];
 
@@ -89,6 +100,7 @@ void trip_draw_trip() {
 	digit_draw_7x5(TRIP_BRACE_X + 3, TRIP_BRACE_Y, current_distance + 1);
 }
 
+// TODO: Rotary-Controller implementieren
 void trip_on_touch(uint16_t time) {
 	if (time > 15*4) {
 		gear_draw_value ^= BIT0;

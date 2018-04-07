@@ -1,9 +1,11 @@
 #include <msp430.h>
 #include <stdint.h>
-
 #include "digit.h"
-#include "touch.h"
 #include "trip.h"
+
+#include "touch.h"
+
+// TODO Überarbeitung -> Implementierung des Rotary Controllers
 
 static uint16_t pressed_ticks = 0;
 
