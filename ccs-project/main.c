@@ -9,7 +9,7 @@
  */
 int main(void) {
 	// Stopp Watchdog-Timer
-	WDTCTL = WDTPW | WDTHOLD;
+ 	WDTCTL = WDTPW | WDTHOLD;
 
 	// 1 MHz Main Clock Kalibrierung setzen
 	DCOCTL = CALDCO_1MHZ;

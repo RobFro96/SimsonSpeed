@@ -8,8 +8,9 @@
 
 const uint16_t CIRCUM = 167;	// Radumfang in cm
 
-static const uint8_t SPEED_VERT_X = 47;	// X-Position vertikaler Strich zum Abtrennen
-static const uint8_t SPEED_KMH_X = 47;		// X-Position des km/h-Labels
+static const uint8_t SPEED_VERT1_X = 45;// X-Position vertikaler Strich zum Abtrennen links
+static const uint8_t SPEED_VERT2_X = 64;// X-Position vertikaler Strich zum Abtrennen rechts
+static const uint8_t SPEED_KMH_X = 45;		// X-Position des km/h-Labels
 static const uint8_t SPEED_KMH_SIZE = 19;	// Größe des km/h-Labels
 static const uint8_t SPEED_KMH_Y = 7;		// Y-Page des km/h-Labels
 static const uint8_t SPEED_VALUE_Y = 4;		// Y-Page der Anzeige
@@ -18,8 +19,8 @@ static const uint8_t SPEED_VALUE_X_2 = 24;	// X-Position der 2. Ziffer
 
 // Pixeldaten des km/h-Labels mit Abtrennung, siehe gfx/kmh.png
 static const uint8_t SPEED_DATA_KMH[] =
-		{ 0x7d, 0x21, 0x51, 0x1, 0x61, 0x11, 0x71, 0x11, 0x71, 0x1, 0x61, 0x11,
-				0xd, 0x1, 0x7d, 0x11, 0x61, 0x1, 0xff };
+		{ 0x1, 0x7d, 0x21, 0x51, 0x1, 0x61, 0x11, 0x71, 0x11, 0x71, 0x1, 0x61,
+				0x11, 0xd, 0x1, 0x7d, 0x11, 0x61, 0x1 };
 
 /**
  * Zeichnen des statischen Teil der Anzeige
@@ -31,9 +32,14 @@ void speed_draw_label() {
 	}
 
 	// Vertikale Abtrennung
-	lcd_set_pixels(SPEED_VERT_X, 3, 0b11111000);
+	lcd_set_pixels(SPEED_VERT1_X, 3, 0b11111000);
 	for (uint8_t y = 4; y <= 6; y++) {
-		lcd_set_pixels(SPEED_VERT_X, y, 0xff);
+		lcd_set_pixels(SPEED_VERT1_X, y, 0xff);
+	}
+
+	lcd_set_pixels(SPEED_VERT2_X, 3, 0b11111000);
+	for (uint8_t y = 4; y <= 7; y++) {
+		lcd_set_pixels(SPEED_VERT2_X, y, 0xff);
 	}
 
 	// km/h-Label

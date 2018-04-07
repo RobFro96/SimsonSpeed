@@ -21,10 +21,10 @@ static const uint8_t TRTP_LABEL_SIZE = 26;
 static const uint8_t TRIP_LABEL_X = 49;
 static const uint8_t TRIP_Y = 6;
 static const uint8_t TRIP_DEC_PNT_X = 94;
-static const uint8_t TRIP_VALUE_X_1 = 76;
-static const uint8_t TRIP_VALUE_X_2 = 82;
-static const uint8_t TRIP_VALUE_X_3 = 88;
-static const uint8_t TRIP_VALUE_X_4 = 97;
+//static const uint8_t TRIP_VALUE_X_1 = 76;
+//static const uint8_t TRIP_VALUE_X_2 = 82;
+//static const uint8_t TRIP_VALUE_X_3 = 88;
+//static const uint8_t TRIP_VALUE_X_4 = 97;
 static const uint8_t TRIP_BRACE_X = 91;
 static const uint8_t TRIP_BRACE_Y = 7;
 
@@ -47,19 +47,19 @@ void trip_on_rotation() {
  */
 void trip_draw_label() {
 	// TODO: Neue Anzeige implementieren
-	for (uint8_t x = 0; x < TRTP_LABEL_SIZE; x++) {
-		lcd_set_pixels(x + TRIP_LABEL_X, TRIP_Y, TRIP_DATA_LABEL[x]);
-	}
-
-	// Print Decimal Point
-	lcd_set_pixels(TRIP_DEC_PNT_X, TRIP_Y, 0b01100000);
-	lcd_set_pixels(TRIP_DEC_PNT_X + 1, TRIP_Y, 0b01100000);
-
-	// Print Trip Select Braces
-	lcd_set_pixels(TRIP_BRACE_X, TRIP_BRACE_Y, 0b01111111);
-	lcd_set_pixels(TRIP_BRACE_X + 1, TRIP_BRACE_Y, 0b01000001);
-	lcd_set_pixels(TRIP_BRACE_X + 9, TRIP_BRACE_Y, 0b01000001);
-	lcd_set_pixels(TRIP_BRACE_X + 10, TRIP_BRACE_Y, 0b01111111);
+//	for (uint8_t x = 0; x < TRTP_LABEL_SIZE; x++) {
+//		lcd_set_pixels(x + TRIP_LABEL_X, TRIP_Y, TRIP_DATA_LABEL[x]);
+//	}
+//
+//	// Print Decimal Point
+//	lcd_set_pixels(TRIP_DEC_PNT_X, TRIP_Y, 0b01100000);
+//	lcd_set_pixels(TRIP_DEC_PNT_X + 1, TRIP_Y, 0b01100000);
+//
+//	// Print Trip Select Braces
+//	lcd_set_pixels(TRIP_BRACE_X, TRIP_BRACE_Y, 0b01111111);
+//	lcd_set_pixels(TRIP_BRACE_X + 1, TRIP_BRACE_Y, 0b01000001);
+//	lcd_set_pixels(TRIP_BRACE_X + 9, TRIP_BRACE_Y, 0b01000001);
+//	lcd_set_pixels(TRIP_BRACE_X + 10, TRIP_BRACE_Y, 0b01111111);
 
 }
 
@@ -67,37 +67,37 @@ void trip_draw_label() {
  * Aktualisieren der Anzeige
  */
 void trip_draw_trip() {
-	uint16_t distance_temp = distance[current_distance];
-
-	// 100 m Place
-	digit_draw_7x5(TRIP_VALUE_X_4, TRIP_Y, distance_temp % 10);
-
-	// 1 km Place
-	distance_temp = distance_temp / 10;
-	digit_draw_7x5(TRIP_VALUE_X_3, TRIP_Y, distance_temp % 10);
-
-	// 10 km Place
-	distance_temp = distance_temp / 10;
-	uint8_t digit = distance_temp % 10;
-
-	if (distance_temp == 0) {
-		digit_clear_7x5(TRIP_VALUE_X_2, TRIP_Y);
-	} else {
-		digit_draw_7x5(TRIP_VALUE_X_2, TRIP_Y, digit);
-	}
-
-	// 100 km Place
-	distance_temp = distance_temp / 10;
-	digit = distance_temp % 10;
-
-	if (distance_temp == 0) {
-		digit_clear_7x5(TRIP_VALUE_X_1, TRIP_Y);
-	} else {
-		digit_draw_7x5(TRIP_VALUE_X_1, TRIP_Y, digit);
-	}
-
-	// Trip Select
-	digit_draw_7x5(TRIP_BRACE_X + 3, TRIP_BRACE_Y, current_distance + 1);
+//	uint16_t distance_temp = distance[current_distance];
+//
+//	// 100 m Place
+//	//digit_draw_7x5(TRIP_VALUE_X_4, TRIP_Y, distance_temp % 10);
+//
+//	// 1 km Place
+//	distance_temp = distance_temp / 10;
+//	//digit_draw_7x5(TRIP_VALUE_X_3, TRIP_Y, distance_temp % 10);
+//
+//	// 10 km Place
+//	//distance_temp = distance_temp / 10;
+//	//uint8_t digit = distance_temp % 10;
+//
+//	if (distance_temp == 0) {
+//		//digit_clear_7x5(TRIP_VALUE_X_2, TRIP_Y);
+//	} else {
+//		// digit_draw_7x5(TRIP_VALUE_X_2, TRIP_Y, digit);
+//	}
+//
+//	// 100 km Place
+//	//distance_temp = distance_temp / 10;
+//	//digit = distance_temp % 10;
+//
+//	if (distance_temp == 0) {
+//		//digit_clear_7x5(TRIP_VALUE_X_1, TRIP_Y);
+//	} else {
+//		//digit_draw_7x5(TRIP_VALUE_X_1, TRIP_Y, digit);
+//	}
+//
+//	// Trip Select
+//	//digit_draw_7x5(TRIP_BRACE_X + 3, TRIP_BRACE_Y, current_distance + 1);
 }
 
 // TODO: Rotary-Controller implementieren

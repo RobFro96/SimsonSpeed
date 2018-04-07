@@ -80,3 +80,38 @@ void font_draw_string(uint8_t x, uint8_t y_page, char *str) {
 		str++;
 	}
 }
+
+/**
+ * Anzeigen einer maximal 5-stelligen Ganzzahl
+ *
+ * @param x			X-Position
+ * @param y_page	Y-Page
+ * @param number	Zahl, die angezeigt werden soll
+ * @param digit_count	Anzahl der Stellen der Zahl, führende Nullen werden entfernt, Zahl ist entsprechend wird rechtsbündig ausgegeben
+ */
+void font_draw_number(uint8_t x, uint8_t y_page, uint32_t number,
+		uint8_t digit_count) {
+	char string[6]; // Festlegung: Maximal 5 Stellen + \0
+
+	// Zeichenkette erstellen
+	for (uint8_t digit = 0; digit < digit_count; digit++) {
+		char c = '0' + (number % 10);
+		string[digit_count - digit - 1] = c;
+		number /= 10;
+	}
+
+	// Führende Nullen entfernen
+	for (uint8_t digit = 0; digit < digit_count; digit++) {
+		if (string[digit] == '0') {
+			string[digit] = ' ';
+		} else {
+			break;
+		}
+	}
+
+	// \0 setzen
+	string[digit_count] = 0;
+
+	// Anzeigen
+	font_draw_string(x, y_page, string);
+}

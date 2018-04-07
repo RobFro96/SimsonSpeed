@@ -10,5 +10,7 @@
 
 void font_draw_char(uint8_t x, uint8_t y_page, char c);
 void font_draw_string(uint8_t x, uint8_t y_page, char *str);
+void font_draw_number(uint8_t x, uint8_t y_page, uint32_t number,
+		uint8_t digit_count);
 
 #endif /* FONT_H_ */
