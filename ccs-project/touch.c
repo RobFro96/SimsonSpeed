@@ -25,7 +25,7 @@ void touch_disable() {
 void touch_on_timer() {
 	if (P2IN & BIT3) {
 		if (pressed_ticks > 0) {
-			trip_on_touch(pressed_ticks);
+			//trip_on_touch(pressed_ticks);
 		}
 		pressed_ticks = 0;
 	} else {

@@ -101,7 +101,7 @@ void font_draw_number(uint8_t x, uint8_t y_page, uint32_t number,
 	}
 
 	// Führende Nullen entfernen
-	for (uint8_t digit = 0; digit < digit_count; digit++) {
+	for (uint8_t digit = 0; digit < digit_count - 1; digit++) {
 		if (string[digit] == '0') {
 			string[digit] = ' ';
 		} else {

@@ -9,8 +9,6 @@
 #define TRIP_H_
 
 void trip_on_rotation();
-void trip_draw_label();
-void trip_draw_trip();
-void trip_on_touch(uint16_t time);
+void trip_draw();
 
 #endif /* TRIP_H_ */

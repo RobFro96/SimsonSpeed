@@ -8,6 +8,7 @@
 #include "trip.h"
 #include "gear.h"
 #include "touch.h"
+#include "fixed.h"
 
 #include "power.h"
 
@@ -32,10 +33,7 @@ void power_init() {
 	touch_init();
 
 	// Zeichnen der statische Elemente des LCD
-	rpm_draw_label();
-	speed_draw_label();
-	trip_draw_label();
-	gear_draw_label();
+	fixed_draw();
 }
 
 /**
@@ -87,10 +85,10 @@ void power_main_loop() {
 
 	} else {
 		// Aktualisieren der Anzeigen
-		rpm_draw_bar();
-		speed_draw_speed();
-		trip_draw_trip();
-		gear_draw_gear();
+		rpm_draw();
+		speed_draw();
+		trip_draw();
+		gear_draw();
 	}
 }
 

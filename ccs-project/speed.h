@@ -3,7 +3,6 @@
 
 extern const uint16_t CIRCUM;
 
-void speed_draw_label();
-void speed_draw_speed();
+void speed_draw();
 
 #endif /* SPEED_H_ */
