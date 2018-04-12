@@ -73,7 +73,7 @@ void font_draw_char(uint8_t x, uint8_t y_page, char c) {
  * @param y_page	Y-Page
  * @param str		Zeichenkette, Ende der Zeichenkette mit '\0'
  */
-void font_draw_string(uint8_t x, uint8_t y_page, char *str) {
+void font_draw_string(uint8_t x, uint8_t y_page, const char *str) {
 	while (*str != 0x0) {
 		font_draw_char(x, y_page, *str);
 		x += 6;

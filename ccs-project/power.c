@@ -9,7 +9,7 @@
 #include "gear.h"
 #include "fixed.h"
 #include "rotary.h"
-
+#include "submenu.h"
 #include "font.h"
 
 #include "power.h"
@@ -92,6 +92,7 @@ void power_main_loop() {
 		trip_draw();
 		gear_draw();
 
-		font_draw_number(53, 7, rotary_counter, 5);
+		submenu_draw();
+		//font_draw_number(53, 7, rotary_counter, 5);
 	}
 }

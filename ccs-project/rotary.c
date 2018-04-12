@@ -5,7 +5,7 @@
 #include "rotary.h"
 
 
-uint8_t rotary_pressed = 0; //!< Gibt, an ob der Rotary gedrückt wurde. Muss manuell resettet werden.
+volatile uint8_t rotary_pressed = 0; //!< Gibt, an ob der Rotary gedrückt wurde. Muss manuell resettet werden.
 volatile int16_t rotary_counter = 0; //!< Gibt die aktuelle Position des Drehgebers an. Kann manipuliert werden.
 
 /**
