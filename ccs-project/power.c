@@ -7,8 +7,10 @@
 #include "speed.h"
 #include "trip.h"
 #include "gear.h"
-#include "touch.h"
 #include "fixed.h"
+#include "rotary.h"
+
+#include "font.h"
 
 #include "power.h"
 
@@ -16,7 +18,7 @@
 static const uint16_t STANDBY_INTERVAL = 30 * 15; // time = INTERVAL / (15.26 Hz)
 
 static uint16_t timer_value = 0;	// Wert des StandBy-Timers
-static uint8_t sleeping = 0;// Aktueller Zustand (StandBy [1], Aktiviert [0])
+uint8_t power_sleeping = 0;// Aktueller Zustand (StandBy [1], Aktiviert [0])
 
 /**
  * Wechsel des Power-Zustandes zu aktiv.
@@ -25,12 +27,12 @@ static uint8_t sleeping = 0;// Aktueller Zustand (StandBy [1], Aktiviert [0])
 void power_init() {
 	// Interrupt-Enable für RPM und Speed deaktivieren
 	// Reaktion auf Pegelwechsel findet nun über Timer statt
-	P2IE &= ~(BIT0 + BIT1);
+	P2IE &= ~BIT0;
 
 	// Initialisieren der Module
 	lcd_init();
 	timer_init();
-	touch_init();
+	rotary_init();
 
 	// Zeichnen der statische Elemente des LCD
 	fixed_draw();
@@ -41,7 +43,7 @@ void power_init() {
  * Module werden deaktiviert
  */
 void power_fall_asleep() {
-	// Einstellen der Wakeup-Pins
+	// Einstellen des RPM-Pin mit Interrupt -> Wakeup
 	P2DIR &= ~BIT0;
 	P2SEL &= ~BIT0;
 	P2SEL2 &= ~BIT0;
@@ -51,7 +53,7 @@ void power_fall_asleep() {
 	// Deaktivieren der Module
 	lcd_disable();
 	timer_disable();
-	touch_disable();
+	rotary_disable();
 }
 
 /**
@@ -75,11 +77,11 @@ void power_main_loop() {
 	if (timer_value > STANDBY_INTERVAL) {
 		// Standy aktivieren
 		power_fall_asleep();
-		sleeping = 1;
+		power_sleeping = 1;
 		__low_power_mode_4();	// Warten im LPM
 
 		// Aufwachen
-		sleeping = 0;
+		power_sleeping = 0;
 		power_init();
 		power_feed_timer();
 
@@ -89,28 +91,7 @@ void power_main_loop() {
 		speed_draw();
 		trip_draw();
 		gear_draw();
-	}
-}
 
-/**
- * ISR für Port 2
- *
- * Pin 2.0 (RPM): Aufwachen im StandBy
- * Pin 2.3 (BTN): Aufwachen im StandBy
- */
-#pragma vector=PORT2_VECTOR
-interrupt void PORT2_ISR() {
-	if (P2IFG & BIT0) {
-		P2IFG &= ~BIT0;
-		if (sleeping) {
-			__low_power_mode_off_on_exit();
-		}
-	}
-
-	if (P2IFG & BIT3) {
-		P2IFG &= ~BIT3;
-		if (sleeping) {
-			__low_power_mode_off_on_exit();
-		}
+		font_draw_number(53, 7, rotary_counter, 5);
 	}
 }

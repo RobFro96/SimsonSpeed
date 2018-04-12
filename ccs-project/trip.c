@@ -45,6 +45,10 @@ void trip_draw() {
 	font_draw_number(DISTANCE_TOTAL_X, DISTANCE_Y_START + 2, distance_total / 10, 5);
 }
 
+/**
+ * Zeichnen eines Trips
+ * @param id	Id des Trips (0 oder 1) -> Bestimmt Wert und Y-Page
+ */
 static void draw_distance(uint8_t id) {
 	uint8_t y_page = DISTANCE_Y_START + id;
 	font_draw_number(DISTANCES_X, y_page, distances[id] / 10, 3);

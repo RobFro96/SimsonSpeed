@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include "trip.h"
 #include "power.h"
-#include "touch.h"
+#include "rotary.h"
 
 #include "timer.h"
 
@@ -16,7 +16,7 @@ static uint16_t last_ccr0 = 0;		// Alter Wert des CCR0-Registers
 static uint16_t last_ccr1 = 0;		// Alter Wert des CCR1-Registers
 static uint8_t overflowed_rpm = 1;	// Gibt an, ob es zum Overflow des CCR0 kam
 static uint8_t overflowed_speed = 1;// Gibt an, ob es zum Overflow des CCR1 kam
-static uint16_t overflow = 0;// Zähler der Timer-Overflows, da Geschwindigkeitsperiode zwangsweise über mehrer Overflows geht
+uint16_t timer_overflow = 0;// Zähler der Timer-Overflows, da Geschwindigkeitsperiode zwangsweise über mehrer Overflows geht
 
 // Prototypen
 static void isr_TA1_ccr1();
@@ -130,7 +130,7 @@ static void isr_TA1_ccr2() {
 	trip_on_rotation();
 
 	// Zusammensetzen des Timers-Wertes aus CCR1-Wert und Timer-Overflow-Wert
-	uint16_t ccr1 = (overflow << 10) + (TA1CCR1 >> 6);
+	uint16_t ccr1 = (timer_overflow << 10) + (TA1CCR1 >> 6);
 
 	// Prüfe: kein Overflow des Speed-Timers
 	if (last_ccr1 != 0xffff) {
@@ -160,10 +160,10 @@ static void isr_TA1_overflow() {
 	overflowed_rpm = 1;
 
 	// Overflow-Counter erhöhen -> wird benötigt zur Speed-Messung
-	overflow++;
+	timer_overflow++;
 
 	// Overflow-Counter overflowed (Nibble-Overflow)
-	if ((overflow & 0xf) == 0xf) {
+	if ((timer_overflow & 0xf) == 0xf) {
 
 		// Löschen der Speed-Periode
 		if (overflowed_speed) {
@@ -177,5 +177,4 @@ static void isr_TA1_overflow() {
 
 	// Funktionen ausführen, die 15,26 Hz-Timer benötigen
 	power_tick_timer();	// StandBy hochzählen
-	touch_on_timer();	// Touch-Updaten
 }
