@@ -46,6 +46,14 @@ void trip_draw() {
 }
 
 /**
+ * Setzt den angegebenen Trip auf den Wert 0 zurück.
+ * @param id	Id des Trips (0 oder 1^)
+ */
+void trip_reset(uint8_t id) {
+	distances[id] = 0;
+}
+
+/**
  * Zeichnen eines Trips
  * @param id	Id des Trips (0 oder 1) -> Bestimmt Wert und Y-Page
  */

@@ -18,7 +18,11 @@
 static const uint16_t STANDBY_INTERVAL = 30 * 15; // time = INTERVAL / (15.26 Hz)
 
 static uint16_t timer_value = 0;	// Wert des StandBy-Timers
-uint8_t power_sleeping = 0;// Aktueller Zustand (StandBy [1], Aktiviert [0])
+uint8_t power_sleeping = 0;	// Aktueller Zustand (StandBy [1], Aktiviert [0])
+static display_t current_display = DISPLAY_MAIN;// 0...Hauptanzeige, 1...Einstellungen
+
+static void init_display();
+static void draw_display();
 
 /**
  * Wechsel des Power-Zustandes zu aktiv.
@@ -35,7 +39,7 @@ void power_init() {
 	rotary_init();
 
 	// Zeichnen der statische Elemente des LCD
-	fixed_draw();
+	init_display();
 }
 
 /**
@@ -84,15 +88,44 @@ void power_main_loop() {
 		power_sleeping = 0;
 		power_init();
 		power_feed_timer();
-
 	} else {
-		// Aktualisieren der Anzeigen
+		draw_display();
+	}
+}
+
+void power_change_display(display_t new_display) {
+	current_display = new_display;
+	lcd_clear_all();
+	init_display();
+}
+
+static void init_display() {
+	switch (current_display) {
+	case DISPLAY_MAIN:
+		fixed_draw();
+		submenu_init();
+		break;
+	case DISPLAY_SETTINGS:
+
+		break;
+	default:
+		break;
+	}
+}
+
+static void draw_display() {
+	switch (current_display) {
+	case DISPLAY_MAIN:
 		rpm_draw();
 		speed_draw();
 		trip_draw();
 		gear_draw();
-
 		submenu_draw();
-		//font_draw_number(53, 7, rotary_counter, 5);
+		break;
+	case DISPLAY_SETTINGS:
+
+		break;
+	default:
+		break;
 	}
 }

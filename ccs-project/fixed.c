@@ -85,7 +85,7 @@ static void draw_seperator() {
 		lcd_set_pixels(SEP_VERT1_X, y, 0xff);
 	}
 
-	// Vertikal eAbtrennung 2
+	// Vertikale Abtrennung 2
 	lcd_set_pixels(SEP_VERT2_X, 3, SEP_T_PIECE);
 	for (uint8_t y = SEP_Y_START + 1; y <= SEP_Y_END; y++) {
 		lcd_set_pixels(SEP_VERT2_X, y, 0xff);
