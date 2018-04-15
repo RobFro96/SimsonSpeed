@@ -11,6 +11,7 @@
 #include "rotary.h"
 #include "submenu.h"
 #include "font.h"
+#include "settings_fixed.h"
 
 #include "power.h"
 
@@ -106,7 +107,7 @@ static void init_display() {
 		submenu_init();
 		break;
 	case DISPLAY_SETTINGS:
-
+		settings_fixed_draw();
 		break;
 	default:
 		break;

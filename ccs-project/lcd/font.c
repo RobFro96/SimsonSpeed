@@ -67,6 +67,28 @@ void font_draw_char(uint8_t x, uint8_t y_page, char c) {
 }
 
 /**
+ * Zeichnen eines Zeichens in dicker 7x5 Schriftart
+ *
+ * @param x			X-Position
+ * @param y_page	Y-Page
+ * @param c			Zeichen
+ */
+void font_draw_char_bold(uint8_t x, uint8_t y_page, char c) {
+	const uint8_t *pt = &(FONT_DATA[5 * (c - 32)]);
+	uint8_t last = 0;
+
+	for (uint8_t i = 0; i < 6; i++) {
+		uint8_t current = (i == 5) ? 0 : *pt;
+		lcd_set_pixels(x + i, y_page, current | last);
+		last = current;
+		pt++;
+	}
+
+	lcd_set_pixels(x + 6, y_page, 0);
+}
+
+
+/**
  * Zeichnen einer Zeichenkette
  *
  * @param x			X-Position
@@ -77,6 +99,21 @@ void font_draw_string(uint8_t x, uint8_t y_page, const char *str) {
 	while (*str != 0x0) {
 		font_draw_char(x, y_page, *str);
 		x += 6;
+		str++;
+	}
+}
+
+/**
+ * Zeichnen einer Zeichenkette in dicker Schrift
+ *
+ * @param x			X-Position
+ * @param y_page	Y-Page
+ * @param str		Zeichenkette, Ende der Zeichenkette mit '\0'
+ */
+void font_draw_string_bold(uint8_t x, uint8_t y_page, const char *str) {
+	while (*str != 0x0) {
+		font_draw_char_bold(x, y_page, *str);
+		x += 7;
 		str++;
 	}
 }
