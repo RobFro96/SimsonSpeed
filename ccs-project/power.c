@@ -12,6 +12,8 @@
 #include "submenu.h"
 #include "font.h"
 #include "settings_fixed.h"
+#include "settings_status.h"
+#include "settings_menu.h"
 
 #include "power.h"
 
@@ -108,6 +110,7 @@ static void init_display() {
 		break;
 	case DISPLAY_SETTINGS:
 		settings_fixed_draw();
+		settings_menu_init();
 		break;
 	default:
 		break;
@@ -124,7 +127,8 @@ static void draw_display() {
 		submenu_draw();
 		break;
 	case DISPLAY_SETTINGS:
-
+		settings_status_draw();
+		settings_menu_update();
 		break;
 	default:
 		break;

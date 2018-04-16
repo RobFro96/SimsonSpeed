@@ -7,6 +7,7 @@
  *
  * @return	Ende des Hauptprogramms wird nie erreicht -> kein Rückgabewert
  */
+
 int main(void) {
 	// Stopp Watchdog-Timer
  	WDTCTL = WDTPW | WDTHOLD;

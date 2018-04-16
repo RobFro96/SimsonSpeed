@@ -17,3 +17,13 @@ void sprite_draw(sprite_t *sprite) {
 		pt++;
 	}
 }
+
+void sprite_draw_inverted(sprite_t *sprite, uint8_t invert) {
+	uint8_t mask = invert ? 0xff : 0;
+	const uint8_t *pt = sprite->data;
+
+	for (uint8_t x = sprite->x; x < sprite->x + sprite->size; x++) {
+		lcd_set_pixels(x, sprite->y, *pt ^ mask);
+		pt++;
+	}
+}

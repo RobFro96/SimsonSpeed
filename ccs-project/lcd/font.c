@@ -45,7 +45,8 @@ static const uint8_t FONT_DATA[] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x6f,
 		0x7c, 0x1c, 0x20, 0x40, 0x20, 0x1c, 0x3c, 0x40, 0x30, 0x40, 0x3c, 0x44,
 		0x28, 0x10, 0x28, 0x44, 0x1c, 0xa0, 0xa0, 0xa0, 0x7c, 0x44, 0x64, 0x54,
 		0x4c, 0x44, 0x0, 0x8, 0x36, 0x41, 0x41, 0x0, 0x0, 0x7f, 0x0, 0x0, 0x41,
-		0x41, 0x36, 0x8, 0x0, 0x4, 0x2, 0x4, 0x8, 0x4, 0x0, 0x0, 0x0, 0x0, 0x0 };
+		0x41, 0x36, 0x8, 0x0, 0x4, 0x2, 0x4, 0x8, 0x4, 0x0, 0x0, 0x0, 0x0, 0x0,
+		0x38, 0x45, 0x44, 0x25, 0x7c };
 #endif
 
 /**
@@ -87,6 +88,16 @@ void font_draw_char_bold(uint8_t x, uint8_t y_page, char c) {
 	lcd_set_pixels(x + 6, y_page, 0);
 }
 
+void font_draw_char_inverted(uint8_t x, uint8_t y_page, char c, uint8_t mask) {
+	const uint8_t *pt = &(FONT_DATA[5 * (c - 32)]);
+
+	for (uint8_t i = 0; i < 5; i++) {
+		lcd_set_pixels(x + i, y_page, *pt ^ mask);
+		pt++;
+	}
+
+	lcd_set_pixels(x + 5, y_page, mask);
+}
 
 /**
  * Zeichnen einer Zeichenkette
@@ -118,6 +129,16 @@ void font_draw_string_bold(uint8_t x, uint8_t y_page, const char *str) {
 	}
 }
 
+void font_draw_string_invert(uint8_t x, uint8_t y_page, const char *str,
+		uint8_t invert) {
+	uint8_t mask = invert ? 0xff : 0;
+	while (*str != 0x0) {
+		font_draw_char_inverted(x, y_page, *str, mask);
+		x += 6;
+		str++;
+	}
+}
+
 /**
  * Anzeigen einer maximal 5-stelligen Ganzzahl
  *
@@ -128,6 +149,11 @@ void font_draw_string_bold(uint8_t x, uint8_t y_page, const char *str) {
  */
 void font_draw_number(uint8_t x, uint8_t y_page, uint32_t number,
 		uint8_t digit_count) {
+	font_draw_number_invert(x, y_page, number, digit_count, 0, 0);
+}
+
+void font_draw_number_invert(uint8_t x, uint8_t y_page, uint32_t number,
+		uint8_t digit_count, uint8_t invert, uint8_t leading_zeroes) {
 	char string[6]; // Festlegung: Maximal 5 Stellen + \0
 
 	// Zeichenkette erstellen
@@ -138,11 +164,13 @@ void font_draw_number(uint8_t x, uint8_t y_page, uint32_t number,
 	}
 
 	// Führende Nullen entfernen
-	for (uint8_t digit = 0; digit < digit_count - 1; digit++) {
-		if (string[digit] == '0') {
-			string[digit] = ' ';
-		} else {
-			break;
+	if (!leading_zeroes) {
+		for (uint8_t digit = 0; digit < digit_count - 1; digit++) {
+			if (string[digit] == '0') {
+				string[digit] = ' ';
+			} else {
+				break;
+			}
 		}
 	}
 
@@ -150,5 +178,5 @@ void font_draw_number(uint8_t x, uint8_t y_page, uint32_t number,
 	string[digit_count] = 0;
 
 	// Anzeigen
-	font_draw_string(x, y_page, string);
+	font_draw_string_invert(x, y_page, string, invert);
 }

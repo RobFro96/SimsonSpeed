@@ -9,5 +9,6 @@ typedef const struct {
 } sprite_t;
 
 void sprite_draw(sprite_t *sprite);
+void sprite_draw_inverted(sprite_t *sprite, uint8_t invert);
 
 #endif /* LCD_SPRITE_H_ */

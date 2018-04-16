@@ -40,13 +40,10 @@ static const uint8_t GEAR_Y = 5;	//!< Y-Page
  */
 void gear_draw() {
 	uint8_t gear = 0;
-	uint16_t gear_value = 0;
-	uint16_t rpm_periode = timer_get_rpm_periode();
+	uint8_t gear_value = gear_calculate_value();
 
-	if (rpm_periode != 0xffff && speed_periode != 0xffff) {
-		// Berechnung des Parameters
-		gear_value = speed_periode / (rpm_periode >> 6);
 
+	if (gear_value != 0) {
 		// Auswählen des Ganges
 		for (uint8_t i = 0; i < GEAR_COUNT; i++) {
 			if (gear_value >= GEAR_VALUE_LOW[i]
@@ -68,3 +65,11 @@ void gear_draw() {
 	}
 }
 
+uint8_t gear_calculate_value() {
+	uint16_t rpm_periode = timer_get_rpm_periode();
+	if (rpm_periode != 0xffff && speed_periode != 0xffff) {
+		return speed_periode / (rpm_periode >> 6);
+	} else {
+		return 0;
+	}
+}
