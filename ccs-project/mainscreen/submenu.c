@@ -22,11 +22,12 @@ static void draw_menu();
 static void select_menu();
 
 void submenu_init() {
-	draw_menu();
 	current_selection = 0;
 	rotary_counter = 0;
 	rotary_pressed = 0;
 	disappear_timer = timer_overflow + disappear_interval;
+
+	draw_menu();
 }
 
 void submenu_draw() {

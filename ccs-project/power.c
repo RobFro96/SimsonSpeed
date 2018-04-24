@@ -1,11 +1,11 @@
 #include <msp430.h>
 #include <stdint.h>
+#include "settings_menu.h"
 #include "lcd.h"
 #include "rpm.h"
 #include "timer.h"
 #include "digit.h"
 #include "speed.h"
-#include "trip.h"
 #include "gear.h"
 #include "fixed.h"
 #include "rotary.h"
@@ -13,7 +13,7 @@
 #include "font.h"
 #include "settings_fixed.h"
 #include "settings_status.h"
-#include "settings_menu.h"
+#include "trip.h"
 
 #include "power.h"
 
@@ -89,6 +89,7 @@ void power_main_loop() {
 
 		// Aufwachen
 		power_sleeping = 0;
+		current_display = DISPLAY_MAIN;
 		power_init();
 		power_feed_timer();
 	} else {

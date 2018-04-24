@@ -1,6 +1,7 @@
 #include <msp430.h>
 #include <stdint.h>
 #include "power.h"
+#include "settings_menu.h"
 
 /**
  * Hauptprogramm
@@ -24,6 +25,7 @@ int main(void) {
 	__enable_interrupt();
 
 	// Initialisierung und Main-Loop findet im Modul power statt.
+	setting_default();
 	power_init();
 
 	while (1) {

@@ -8,13 +8,12 @@
 #ifndef TRIP_H_
 #define TRIP_H_
 
-typedef enum {
-	DISPLAY_MAIN, DISPLAY_SETTINGS
-} display_t;
+#include "settings_menu.h"
 
 void trip_on_rotation();
 void trip_draw();
 void trip_reset(uint8_t id);
-void power_change_display(display_t new_display);
+void trip_get_total(settings_t *settings);
+void trip_set_total(settings_t *settings);
 
 #endif /* TRIP_H_ */

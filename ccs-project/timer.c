@@ -1,8 +1,8 @@
 #include <msp430.h>
 #include <stdint.h>
-#include "trip.h"
 #include "power.h"
 #include "rotary.h"
+#include "trip.h"
 
 #include "timer.h"
 

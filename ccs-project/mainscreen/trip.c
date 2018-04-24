@@ -4,6 +4,7 @@
 #include "digit.h"
 #include "font.h"
 #include "speed.h"
+#include "settings_menu.h"
 
 #include "trip.h"
 
@@ -51,6 +52,21 @@ void trip_draw() {
  */
 void trip_reset(uint8_t id) {
 	distances[id] = 0;
+}
+
+void trip_get_total(settings_t *settings) {
+	uint32_t total = distance_total / 10;
+	settings->total1 = total % 100;
+	total /= 100;
+	settings->total100 = total % 100;
+	total /= 100;
+	settings->total10000 = total % 10;
+}
+
+void trip_set_total(settings_t *settings) {
+	distance_total = 10L * settings->total1;
+	distance_total += 1000L * settings->total100;
+	distance_total += 100000L* settings->total10000;
 }
 
 /**
