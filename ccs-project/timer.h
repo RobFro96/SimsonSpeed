@@ -2,6 +2,7 @@
 #define TIMER_H_
 
 extern uint16_t speed_periode;
+extern uint16_t rpm_periodes[];
 extern uint16_t timer_overflow;
 
 uint16_t timer_get_rpm_periode();

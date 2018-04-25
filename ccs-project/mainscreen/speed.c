@@ -3,10 +3,9 @@
 #include "lcd.h"
 #include "digit.h"
 #include "timer.h"
+#include "settings_menu.h"
 
 #include "speed.h"
-
-const uint16_t CIRCUM = 167;	// Radumfang in cm
 
 static const uint8_t SPEED_VALUE_Y = 4;		// Y-Page der Anzeige
 static const uint8_t SPEED_VALUE_X_1 = 2;	// X-Position der 1. Ziffer
@@ -37,7 +36,7 @@ void speed_draw() {
  */
 uint8_t speed_calculate() {
 	if (speed_periode != 0xffff) {
-		return (uint8_t) (CIRCUM * 3.6f / (speed_periode * 64e-4));
+		return (uint8_t) (settings.circum * 3.6f / (speed_periode * 64e-4));
 	} else {
 		return 0;
 	}

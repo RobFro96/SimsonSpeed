@@ -12,11 +12,12 @@ static sprite_t sprite_exit = { 94, 0, 7, { 0x42, 0x66, 0x3c, 0x18, 0x3c, 0x66, 
 static sprite_t sprite_standard = { 55, 3, 36, { 0x7f, 0x41, 0x0, 0x24, 0x2a, 0x12, 0x0, 0x1e, 0x24, 0x0, 0x18, 0x24, 0x3c, 0x0, 0x3c, 0x4, 0x38, 0x0, 0x18,
 		0x24, 0x3e, 0x0, 0x18, 0x24, 0x3c, 0x0, 0x3c, 0x8, 0x4, 0x0, 0x18, 0x24, 0x3e, 0x0, 0x41, 0x7f } }; //!<Button zum Setzen der Standard-Werte, siehe gfx/settings_standard.png
 
-static const uint8_t ITEM_COUNT = 15;
-static int8_t current_item;
-static uint8_t selected;
-settings_t settings;
+static const uint8_t ITEM_COUNT = 15;	//!< Anzahl der Menüelement
+static int8_t current_item;	//!< Ausgewähltes Menüelement
+static uint8_t selected;	//!< Gibt an, ob sich der Cursor im Untermenü befindet
+settings_t settings;	//!< Einstellungen
 
+// Prototypen
 static void change_menu_point();
 static void select_menu_point();
 static void change_item_value();
@@ -24,6 +25,10 @@ static void deselect_menu_point();
 static void modulo(int8_t *number, uint8_t divider);
 static void set_default_gear_values();
 
+/**
+ * Initialisierung aller Einstellungen
+ * Wird einmal bei Programmstart aufgerufen
+ */
 void setting_default() {
 	settings.total10000 = 0;
 	settings.total100 = 0;
@@ -33,6 +38,9 @@ void setting_default() {
 	set_default_gear_values();
 }
 
+/**
+ * Initialisierung des Menüs
+ */
 void settings_menu_init() {
 	current_item = ITEM_CLOSE;
 	selected = 0;
@@ -42,7 +50,12 @@ void settings_menu_init() {
 	settings_menu_draw();
 }
 
+/**
+ * Aktualisierung des Menüs
+ * Reaktion auf Eingaben durch Rotary-Controller
+ */
 void settings_menu_update() {
+	// Rotation des Rotary-Controllers
 	if (rotary_counter != 0) {
 
 		if (!selected) {
@@ -56,6 +69,7 @@ void settings_menu_update() {
 		power_feed_timer();
 	}
 
+	// Drücken des Rotary-Controllers
 	if (rotary_pressed) {
 		if (!selected) {
 			select_menu_point();
@@ -71,6 +85,9 @@ void settings_menu_update() {
 	}
 }
 
+/**
+ * Zeichnen der Einstellungen
+ */
 void settings_menu_draw() {
 	sprite_draw_inverted(&sprite_exit, current_item == ITEM_CLOSE);
 
@@ -89,11 +106,17 @@ void settings_menu_draw() {
 	}
 }
 
+/**
+ * Wird ausgeführt, wenn Rotary im Hauptmenü gedreht wird.
+ */
 static void change_menu_point() {
 	current_item += rotary_counter;
 	modulo(&current_item, ITEM_COUNT);
 }
 
+/**
+ * Wird ausgeführt, wenn Rotary im Hauptmenü gedrückt wird.
+ */
 static void select_menu_point() {
 	switch (current_item) {
 	case ITEM_CLOSE:
@@ -111,6 +134,9 @@ static void select_menu_point() {
 	}
 }
 
+/**
+ * Wird ausgeführt, wenn Rotary im Untermenü gedreht wird.
+ */
 static void change_item_value() {
 	switch (current_item) {
 	case ITEM_TOTAL_10000:
@@ -140,6 +166,9 @@ static void change_item_value() {
 	}
 }
 
+/**
+ * Wird ausgeführt, wenn Rotary im Untermenü gedrückt wird.
+ */
 static void deselect_menu_point() {
 	selected = 0;
 
@@ -148,6 +177,12 @@ static void deselect_menu_point() {
 	}
 }
 
+/**
+ * Funktion zur Berechnung der Modulo-Funktion, auch für negative Zahlen
+ *
+ * @param number	Zahl
+ * @param divider	Teiler
+ */
 static void modulo(int8_t *number, uint8_t divider) {
 	while (*number < 0) {
 		*number += divider;
@@ -158,27 +193,30 @@ static void modulo(int8_t *number, uint8_t divider) {
 	}
 }
 
+/**
+ * Setzen der Standard-Werte der Gänge
+ */
 static void set_default_gear_values() {
 	switch (settings.gear_count) {
 	case 3:
-		settings.gears_high[3] = 0;
-		settings.gears_low[3] = 0;
-		settings.gears_high[2] = 40;
-		settings.gears_low[2] = 30;
-		settings.gears_high[1] = 55;
-		settings.gears_low[1] = 45;
 		settings.gears_high[0] = 110;
 		settings.gears_low[0] = 90;
+		settings.gears_high[1] = 55;
+		settings.gears_low[1] = 45;
+		settings.gears_high[2] = 40;
+		settings.gears_low[2] = 30;
+		settings.gears_high[3] = 0;
+		settings.gears_low[3] = 0;
 		break;
 	case 4:
-		settings.gears_high[3] = 110;
-		settings.gears_low[3] = 90;
-		settings.gears_high[2] = 38;
-		settings.gears_low[2] = 32;
-		settings.gears_high[1] = 46;
-		settings.gears_low[1] = 40;
-		settings.gears_high[0] = 60;
-		settings.gears_low[0] = 50;
+		settings.gears_high[0] = 110;
+		settings.gears_low[0] = 90;
+		settings.gears_high[1] = 38;
+		settings.gears_low[1] = 32;
+		settings.gears_high[2] = 46;
+		settings.gears_low[2] = 40;
+		settings.gears_high[3] = 60;
+		settings.gears_low[3] = 50;
 		break;
 	default:
 		break;

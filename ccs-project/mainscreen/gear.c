@@ -3,6 +3,7 @@
 #include "lcd.h"
 #include "digit.h"
 #include "timer.h"
+#include "settings_menu.h"
 
 #include "gear.h"
 
@@ -27,11 +28,6 @@ static const uint8_t GEAR_DATA_DIGITS[] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
 		0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f, 0x0,
 		0xc0, 0x3, 0x0, 0xc0, 0x3 }; //!< Pixeldaten der Ziffern der Gänge, siehe gfx/digits_gear.png
 
-// Einstellung der Gänge
-static const uint8_t GEAR_VALUE_HIGH[] = { 110, 55, 40 }; // Maximum des Parameters
-static const uint8_t GEAR_VALUE_LOW[] = { 90, 45, 30 };	// Minimum des Parameters
-static const uint8_t GEAR_COUNT = 3;						// Anzahl der Gänge
-
 static const uint8_t GEAR_X = 85;	//!< Position der Anzeige
 static const uint8_t GEAR_Y = 5;	//!< Y-Page
 
@@ -45,9 +41,9 @@ void gear_draw() {
 
 	if (gear_value != 0) {
 		// Auswählen des Ganges
-		for (uint8_t i = 0; i < GEAR_COUNT; i++) {
-			if (gear_value >= GEAR_VALUE_LOW[i]
-					&& gear_value < GEAR_VALUE_HIGH[i]) {
+		for (uint8_t i = 0; i < settings.gear_count; i++) {
+			if (gear_value >= settings.gears_low[i]
+					&& gear_value < settings.gears_high[i]) {
 				gear = i + 1;
 				break;
 			}

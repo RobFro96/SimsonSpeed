@@ -88,6 +88,14 @@ void font_draw_char_bold(uint8_t x, uint8_t y_page, char c) {
 	lcd_set_pixels(x + 6, y_page, 0);
 }
 
+/**
+ * Zeichnen eines Zeichens in 7x5 Schriftart. Dieses Zeichen kann invertiert werden
+ *
+ * @param x			X-Position
+ * @param y_page	Y-Page
+ * @param c			Zeichen
+ * @param mask		Maske zur Invertierung
+ */
 void font_draw_char_inverted(uint8_t x, uint8_t y_page, char c, uint8_t mask) {
 	const uint8_t *pt = &(FONT_DATA[5 * (c - 32)]);
 
@@ -129,6 +137,14 @@ void font_draw_string_bold(uint8_t x, uint8_t y_page, const char *str) {
 	}
 }
 
+/**
+ * Zeichnen einer Zeichenkette. Diese kann invertiert werden.
+ *
+ * @param x			X-Position
+ * @param y_page	Y-Page
+ * @param str		Zeichenkette
+ * @param invert	Gibt, an ob invertiert werden soll
+ */
 void font_draw_string_invert(uint8_t x, uint8_t y_page, const char *str,
 		uint8_t invert) {
 	uint8_t mask = invert ? 0xff : 0;
@@ -152,6 +168,16 @@ void font_draw_number(uint8_t x, uint8_t y_page, uint32_t number,
 	font_draw_number_invert(x, y_page, number, digit_count, 0, 0);
 }
 
+/**
+ * Anzeigen einer maximal 5-stelligen Ganzzahl. Invertierung und führenden Nullen können eingestellt werden.
+ *
+ * @param x				X-Position
+ * @param y_page		Y-Page
+ * @param number		Zahl, die angezeigt werdne sollen
+ * @param digit_count	Anzahl der Stellen der Zahl
+ * @param invert		Gibt, an ob invertiert werden soll
+ * @param leading_zeroes	Gibt, an ob die Zahl mit führenden Nullen angezeigt werden soll
+ */
 void font_draw_number_invert(uint8_t x, uint8_t y_page, uint32_t number,
 		uint8_t digit_count, uint8_t invert, uint8_t leading_zeroes) {
 	char string[6]; // Festlegung: Maximal 5 Stellen + \0

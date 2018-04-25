@@ -7,6 +7,9 @@
 
 #include "settings_status.h"
 
+/**
+ * Anzeige der aktuellen Werte in der Einstellungsanzeige
+ */
 void settings_status_draw() {
 	font_draw_number(84, 5, speed_calculate(), 3);
 

@@ -1,6 +1,7 @@
 #include <msp430.h>
 #include <stdint.h>
 #include "power.h"
+#include "timer.h"
 
 #include "rotary.h"
 
@@ -58,7 +59,7 @@ interrupt void PORT2_ISR() {
 		P2IFG &= ~BIT3;
 		if (power_sleeping) {
 			__low_power_mode_off_on_exit();
-		} else {
+		} else if (rpm_periodes[0] == 0xffff) {
 			rotary_pressed = 1;
 		}
 	}
@@ -80,6 +81,9 @@ interrupt void PORT2_ISR() {
 #pragma vector=TIMER0_A0_VECTOR
 interrupt void TIMER0_A0_ISR() {
 	TA0CTL = 0;
+
+	if (rpm_periodes[0] != 0xffff)
+		return;
 
 	if (P2IN & BIT4) {
 		if (P2IN & BIT5) {

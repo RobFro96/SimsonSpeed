@@ -25,7 +25,7 @@ static void draw_distance(uint8_t id);
  * Hochzählen der Distanzmessung, wenn es zu einer Radumdrehung kommt
  */
 void trip_on_rotation() {
-	distance_fraction += CIRCUM;// Hinzuaddieren des Radumfangs zur Teil-Distanz
+	distance_fraction += settings.circum;// Hinzuaddieren des Radumfangs zur Teil-Distanz
 
 	// Wenn Teildistanz größer als 100m (10.000 cm) werden die beiden Trips hochgezählt
 	while (distance_fraction > 10000) {
@@ -54,6 +54,11 @@ void trip_reset(uint8_t id) {
 	distances[id] = 0;
 }
 
+/**
+ * Setzt die Gesamtkilometer im Einstellungs-struct settings
+ *
+ * @param settings
+ */
 void trip_get_total(settings_t *settings) {
 	uint32_t total = distance_total / 10;
 	settings->total1 = total % 100;
@@ -63,6 +68,10 @@ void trip_get_total(settings_t *settings) {
 	settings->total10000 = total % 10;
 }
 
+/**
+ * Setzt die Gesamtkilometer aus dem Einstellungs-struct settings
+ * @param settings
+ */
 void trip_set_total(settings_t *settings) {
 	distance_total = 10L * settings->total1;
 	distance_total += 1000L * settings->total100;

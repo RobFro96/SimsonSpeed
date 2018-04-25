@@ -97,12 +97,20 @@ void power_main_loop() {
 	}
 }
 
+/**
+ * Setzt den aktuelle Anzeige und initialisiert diese
+ *
+ * @param new_display
+ */
 void power_change_display(display_t new_display) {
 	current_display = new_display;
 	lcd_clear_all();
 	init_display();
 }
 
+/**
+ * Initialisierung der Anzeigen
+ */
 static void init_display() {
 	switch (current_display) {
 	case DISPLAY_MAIN:
@@ -118,6 +126,9 @@ static void init_display() {
 	}
 }
 
+/**
+ * Zeichnen der Anzeigen
+ */
 static void draw_display() {
 	switch (current_display) {
 	case DISPLAY_MAIN:

@@ -10,7 +10,7 @@
 const uint16_t DEBOUNCE_LENGTH = 256;	// Time = LENGTH * 1us
 
 // Variablen
-static uint16_t rpm_periodes[] = { 0xffff, 0xffff };// Zwei RPM-Perioden im RAM
+uint16_t rpm_periodes[] = { 0xffff, 0xffff };// Zwei RPM-Perioden im RAM
 uint16_t speed_periode = 0xffff;	// Periodendauer der Geschwindigkeitsmessung
 static uint16_t last_ccr0 = 0;		// Alter Wert des CCR0-Registers
 static uint16_t last_ccr1 = 0;		// Alter Wert des CCR1-Registers
